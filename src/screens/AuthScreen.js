@@ -196,10 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1e293b', // Slate 800
     borderRadius: 16,
     padding: 28,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
+    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.3)',
     elevation: 8,
     borderWidth: 1,
     borderColor: '#334155',

@@ -39,6 +39,12 @@ describe('productService - Strict 4-Field Schema and Utilities', () => {
     expect(validateProduct({ name: 'Áo Thun', price: 120000, soluong: 10, image: 'https://img.com/1.jpg' }).isValid).toBe(true);
   });
 
+  it('validateProduct should reject non-numeric price and non-integer quantity (Finding 3)', () => {
+    expect(validateProduct({ name: 'Áo', price: 'abc', soluong: 5, image: 'url' }).isValid).toBe(false);
+    expect(validateProduct({ name: 'Áo', price: 100, soluong: 'xyz', image: 'url' }).isValid).toBe(false);
+    expect(validateProduct({ name: 'Áo', price: 100, soluong: 2.5, image: 'url' }).isValid).toBe(false);
+  });
+
   it('filterAndSortProducts should search by keyword case-insensitively and sort accurately', () => {
     const products = [
       { id: '1', name: 'Bàn phím cơ', price: 1500000, soluong: 5, image: 'img1' },
@@ -50,6 +56,11 @@ describe('productService - Strict 4-Field Schema and Utilities', () => {
     const searchResult = filterAndSortProducts(products, { keyword: 'chuột' });
     expect(searchResult.length).toBe(1);
     expect(searchResult[0].name).toBe('Chuột không dây');
+
+    // Search with unaccented keyword (Finding 4)
+    const unaccentedResult = filterAndSortProducts(products, { keyword: 'ban phim' });
+    expect(unaccentedResult.length).toBe(1);
+    expect(unaccentedResult[0].name).toBe('Bàn phím cơ');
 
     // Sort by price ascending
     const sortedByPriceAsc = filterAndSortProducts(products, { sortBy: 'price', sortOrder: 'asc' });

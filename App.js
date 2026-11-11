@@ -16,7 +16,7 @@ export default function App() {
     });
 
     return () => unsubscribe();
-  }, [initializing]);
+  }, []);
 
   if (initializing) {
     return (

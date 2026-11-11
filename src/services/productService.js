@@ -31,26 +31,67 @@ export function sanitizeProduct(data = {}) {
 }
 
 /**
+ * Chuẩn hóa chuỗi loại bỏ dấu tiếng Việt để tìm kiếm thông minh
+ */
+export function removeVietnameseTones(str = '') {
+  if (typeof str !== 'string') return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase();
+}
+
+/**
  * Kiểm tra tính hợp lệ của sản phẩm trước khi lưu
  */
 export function validateProduct(product = {}) {
-  const sanitized = sanitizeProduct(product);
-
-  if (!sanitized.name) {
+  const name = typeof product.name === 'string' ? product.name.trim() : '';
+  if (!name) {
     return { isValid: false, error: 'Tên sản phẩm không được để trống.' };
   }
 
-  if (sanitized.price < 0) {
+  // Kiểm tra Giá (price)
+  if (
+    product.price === undefined ||
+    product.price === null ||
+    String(product.price).trim() === '' ||
+    isNaN(Number(product.price))
+  ) {
+    return { isValid: false, error: 'Giá sản phẩm phải là một số hợp lệ.' };
+  }
+  const price = Number(product.price);
+  if (price < 0) {
     return { isValid: false, error: 'Giá sản phẩm không được là số âm.' };
   }
 
-  if (sanitized.soluong < 0) {
-    return { isValid: false, error: 'Số lượng sản phẩm không được là số âm.' };
+  // Kiểm tra Số lượng (soluong)
+  if (
+    product.soluong === undefined ||
+    product.soluong === null ||
+    String(product.soluong).trim() === '' ||
+    isNaN(Number(product.soluong))
+  ) {
+    return { isValid: false, error: 'Số lượng sản phẩm phải là một số hợp lệ.' };
+  }
+  const soluong = Number(product.soluong);
+  if (soluong < 0 || !Number.isInteger(soluong)) {
+    return { isValid: false, error: 'Số lượng sản phẩm phải là số nguyên không âm.' };
   }
 
-  if (!sanitized.image) {
+  // Kiểm tra Hình ảnh (image)
+  const image = typeof product.image === 'string' ? product.image.trim() : '';
+  if (!image) {
     return { isValid: false, error: 'Hình ảnh sản phẩm là bắt buộc.' };
   }
+
+  const sanitized = {
+    name,
+    price,
+    soluong,
+    image,
+  };
 
   return { isValid: true, error: null, sanitized };
 }
@@ -121,10 +162,17 @@ export function filterAndSortProducts(products = [], options = {}) {
 
   let result = [...products];
 
-  // Tìm kiếm theo tên
+  // Tìm kiếm theo tên (hỗ trợ cả tiếng Việt có dấu và không dấu)
   if (keyword && keyword.trim()) {
-    const lowerKeyword = keyword.trim().toLowerCase();
-    result = result.filter((p) => p.name && p.name.toLowerCase().includes(lowerKeyword));
+    const normalizedKeyword = removeVietnameseTones(keyword.trim());
+    result = result.filter((p) => {
+      if (!p.name) return false;
+      const normalizedName = removeVietnameseTones(p.name);
+      return (
+        p.name.toLowerCase().includes(keyword.trim().toLowerCase()) ||
+        normalizedName.includes(normalizedKeyword)
+      );
+    });
   }
 
   // Sắp xếp
@@ -160,6 +208,7 @@ export function exportProductsToJSONString(products = []) {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     COLLECTION_NAME,
+    removeVietnameseTones,
     sanitizeProduct,
     validateProduct,
     addProduct,
