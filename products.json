@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Áo Thun Nam Trơn Cổ Tròn Cotton Compact",
+    "price": 189000,
+    "soluong": 50,
+    "image": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600"
+  },
+  {
+    "name": "Áo Sơ Mi Nam Công Sở Dài Tay Chống Nhăn",
+    "price": 320000,
+    "soluong": 35,
+    "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600"
+  },
+  {
+    "name": "Quần Jean Nam Ống Đứng Co Giãn Cao Cấp",
+    "price": 450000,
+    "soluong": 28,
+    "image": "https://images.unsplash.com/photo-1542272604-780c96856592?w=600"
+  },
+  {
+    "name": "Giày Sneaker Nam Thể Thao Phong Cách Retro",
+    "price": 680000,
+    "soluong": 15,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"
+  },
+  {
+    "name": "Balo Laptop Chống Nước Đa Năng 15.6 Inch",
+    "price": 390000,
+    "soluong": 40,
+    "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600"
+  },
+  {
+    "name": "Đồng Hồ Nam Dây Da Quartz Chống Nước 3ATM",
+    "price": 850000,
+    "soluong": 12,
+    "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600"
+  }
+]
